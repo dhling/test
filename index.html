@@ -532,7 +532,7 @@ function adminAuth() {
 // ==============================================
 // 主渲染
 // ==============================================
-function render() {
+function render(applyFilters(allData)) {
   const app = document.getElementById('app');
   if (currentMode === 'view') {
     app.innerHTML = getViewPage();
@@ -540,7 +540,7 @@ function render() {
   } else {
     if (!adminAuth()) {
       currentMode = 'view';
-      render();
+      render(applyFilters(allData));
       return;
     }
     app.innerHTML = currentSubPage === 'owners' ? getOwnerManagerPage() : getAdminPage();
@@ -618,17 +618,17 @@ function bindViewEvents() {
 
   gradeFilter.addEventListener('change', () => {
     filterState.grade = gradeFilter.value;
-    render(allData);
+   render(applyFilters(allData));
   });
 
   nameSearch.addEventListener('input', () => {
     filterState.flowerName = nameSearch.value;
-    render(allData);
+    render(applyFilters(allData));
   });
 
   wayFilter.addEventListener('change', () => {
     filterState.getWay = wayFilter.value;
-    render(allData);
+    render(applyFilters(allData));
   });
 
   ownerBtn.addEventListener('click', () => {
@@ -641,7 +641,7 @@ function bindViewEvents() {
     }
   });
 
-  render(allData);
+  render(applyFilters(allData));
 }
 
 function clearOwner() {
@@ -655,38 +655,41 @@ function okOwner() {
   });
   filterState.owners = sel;
   document.getElementById('ownerPanel').classList.add('hidden');
- render(allData);
+ render(applyFilters(allData));
 }
 
 function resetFilters() {
   filterState = { grade:'', flowerName:'', owners:[], getWay:'' };
-  render();
+  render(applyFilters(allData));
 }
 
 // 渲染列表
-function render(data){
+function render(applyFilters(allData)){
   const html = `
     <div class="max-w-6xl mx-auto">
       <h1 class="text-2xl font-bold mb-6">❄️ 工会花卉查询</h1>
       <div class="grid md:grid-cols-3 gap-4">
-        ${data.map(d => {
-          return `
-            <div class="bg-white p-4 rounded shadow">
-              
-              <img 
-                src="images/${d.名称}.jpg" 
-                onerror="this.src='https://via.placeholder.com/150?text=暂无图片'"
-                class="w-full h-40 object-cover mb-2 rounded"
-              >
+${data.map(d => {
+  return `
+    <div class="bg-white p-4 rounded shadow">
+      
+      <img 
+        src="images/${d.名称}.jpg" 
+        onerror="this.src='https://via.placeholder.com/150?text=暂无图片'"
+        class="w-full h-40 object-cover mb-2 rounded"
+      >
 
-              <div class="font-bold">${d.名称}</div>
-              <div class="text-sm">品级：${d.品级}</div>
-              <div class="text-sm">拥有者：${d.拥有者.join("、") || "无"}</div>
-              <div class="text-sm">获取：${d.获取途径}</div>
+      <div class="font-bold">${d.名称}</div>
+      <div class="text-sm">品级：${d.品级}</div>
+      <div class="text-sm">拥有者：${d.拥有者.join("、") || "无"}</div>
+      <div class="text-sm">获取：${d.获取途径}</div>
 
-            </div>
-          `;
-        }).join("")}
+    </div>
+  `;
+}).join("")}
+
+  document.getElementById("app").innerHTML = html;
+}
       </div>
     </div>
   `;
@@ -825,8 +828,8 @@ function bindAdminEvents() {
 }
 
 // 增删改查
-function goToOwnerManager() { currentSubPage = 'owners'; render(); }
-function backToAdmin() { currentSubPage = ''; render(); }
+function goToOwnerManager() { currentSubPage = 'owners';render(applyFilters(allData)); }
+function backToAdmin() { currentSubPage = ''; render(applyFilters(allData)); }
 
 function addNewOwner() {
   const val = document.getElementById('newOwner').value.trim();
@@ -835,7 +838,7 @@ function addNewOwner() {
   if (list.includes(val)) return alert('已存在');
   list.push(val);
   saveOwnerList(list);
-  render();
+  render(applyFilters(allData));
 }
 
 function deleteOwner(index) {
@@ -843,7 +846,7 @@ function deleteOwner(index) {
   const list = getOwnerList();
   list.splice(index, 1);
   saveOwnerList(list);
-  render();
+  render(applyFilters(allData));
 }
 
 function openAdd() {
@@ -902,25 +905,25 @@ function saveItem() {
   idx >=0 ? data[idx] = item : data.push(item);
   saveFlowerData(data);
   closeModal();
-  render();
+  render(applyFilters(allData));
 }
 
 function delItem(id) {
   if (!confirm('确定删除？')) return;
   const data = loadFlowerData().filter(x=>x.编号!=id);
   saveFlowerData(data);
-  render();
+  render(applyFilters(allData));
 }
 
 function switchMode(m) {
   currentMode = m;
   currentSubPage = '';
   if (m === 'view') filterState = { grade:'', flowerName:'', owners:[], getWay:'' };
-  render();
+  render(applyFilters(allData));
 }
 
 // 启动
-render(allData);
+render(applyFilters(allData));
 </script>
 </body>
 </html>

@@ -673,15 +673,17 @@ function renderList() {
     data.forEach(item => {
       let ownerText = (item.拥有者 || []).join('、') || '未设置';
       html += `
-      <div class="bg-white rounded shadow overflow-hidden">
-        ${item.图片?`<img src="${item.图片}" class="w-full h-40 object-cover">`:'<div class="w-full h-40 bg-gray-100 flex items-center justify-center"><i class="fa fa-image text-gray-300 text-3xl"></i></div>'}
-        <div class="p-4">
-          <div class="text-lg font-bold">${item.编号} ${item.花名}</div>
-          <div class="text-gray-600 text-sm">品级：${item.品级}</div>
-          <div class="text-gray-600 text-sm">拥有者：${ownerText}</div>
-          <div class="text-gray-600 text-sm">获取途径：${item.获取途径}</div>
-          <div class="text-blue-600 text-sm mt-1 font-medium">备注：${item.备注 || '无'}</div>
-        </div>
+     <div class="bg-white p-4 rounded shadow">
+  <img 
+    src="images/${d.名称}.jpg" 
+    onerror="this.src='https://via.placeholder.com/150?text=暂无图片'"
+    class="w-full h-40 object-cover mb-2 rounded"
+  >
+  <div class="font-bold">${d.名称}</div>
+  <div class="text-sm">品级：${d.品级}</div>
+  <div class="text-sm">拥有者：${d.拥有者.join("、")||"无"}</div>
+  <div class="text-sm">获取：${d.获取途径}</div>
+</div>
       </div>`;
     });
   }

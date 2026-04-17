@@ -664,30 +664,34 @@ function resetFilters() {
 }
 
 // 渲染列表
-function renderList() {
-  const data = applyFilters(loadFlowerData());
-  let html = '';
-  if (data.length === 0) {
-    html = '<div class="col-span-full bg-white p-6 rounded shadow text-center">暂无数据</div>';
-  } else {
-    data.forEach(item => {
-      let ownerText = (item.拥有者 || []).join('、') || '未设置';
-      html += `
-     <div class="bg-white p-4 rounded shadow">
-  <img 
-    src="images/${d.名称}.jpg" 
-    onerror="this.src='https://via.placeholder.com/150?text=暂无图片'"
-    class="w-full h-40 object-cover mb-2 rounded"
-  >
-  <div class="font-bold">${d.名称}</div>
-  <div class="text-sm">品级：${d.品级}</div>
-  <div class="text-sm">拥有者：${d.拥有者.join("、")||"无"}</div>
-  <div class="text-sm">获取：${d.获取途径}</div>
-</div>
-      </div>`;
-    });
-  }
-  document.getElementById('list').innerHTML = html;
+function render(data){
+  const html = `
+    <div class="max-w-6xl mx-auto">
+      <h1 class="text-2xl font-bold mb-6">❄️ 工会花卉查询</h1>
+      <div class="grid md:grid-cols-3 gap-4">
+        ${data.map(d => {
+          return `
+            <div class="bg-white p-4 rounded shadow">
+              
+              <img 
+                src="images/${d.名称}.jpg" 
+                onerror="this.src='https://via.placeholder.com/150?text=暂无图片'"
+                class="w-full h-40 object-cover mb-2 rounded"
+              >
+
+              <div class="font-bold">${d.名称}</div>
+              <div class="text-sm">品级：${d.品级}</div>
+              <div class="text-sm">拥有者：${d.拥有者.join("、") || "无"}</div>
+              <div class="text-sm">获取：${d.获取途径}</div>
+
+            </div>
+          `;
+        }).join("")}
+      </div>
+    </div>
+  `;
+
+  document.getElementById("app").innerHTML = html;
 }
 
 // ==============================================

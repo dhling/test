@@ -618,17 +618,17 @@ function bindViewEvents() {
 
   gradeFilter.addEventListener('change', () => {
     filterState.grade = gradeFilter.value;
-    render(allData);;
+    render(allData);
   });
 
   nameSearch.addEventListener('input', () => {
     filterState.flowerName = nameSearch.value;
-    render(allData);;
+    render(allData);
   });
 
   wayFilter.addEventListener('change', () => {
     filterState.getWay = wayFilter.value;
-    render(allData);;
+    render(allData);
   });
 
   ownerBtn.addEventListener('click', () => {
@@ -641,7 +641,7 @@ function bindViewEvents() {
     }
   });
 
-  render(allData);;
+  render(allData);
 }
 
 function clearOwner() {
@@ -655,7 +655,7 @@ function okOwner() {
   });
   filterState.owners = sel;
   document.getElementById('ownerPanel').classList.add('hidden');
- render(allData);;
+ render(allData);
 }
 
 function resetFilters() {
@@ -920,7 +920,7 @@ function switchMode(m) {
 }
 
 // 启动
-render();
+render(allData);
 </script>
 </body>
 </html>
